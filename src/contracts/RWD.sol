@@ -3,7 +3,7 @@ pragma solidity ^0.5.0;
 contract RWD {
   string public  name = 'Reward Token';
   string public symbol = 'RWD';
-  uint256  totalSupply = 100000000000000000000000000000; // 1 million token
+  uint256  totalSupply = 1000000000000000000000000; // 1 million token
   uint8 public decimals = 18; 
 
 

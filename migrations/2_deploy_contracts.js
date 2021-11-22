@@ -16,7 +16,7 @@ module.exports =async function deployer(deployer,network,accounts) {
    const decentralbank = await DecentralBank.deployed();
 
    // Transfer all RWD to DecentralBank
-   await rwd.transfer(decentralbank.address,'100000000000000000000000000000');
+   await rwd.transfer(decentralbank.address,'1000000000000000000000000');
 
    // Distribute 100 tether token to investor
    await tether.transfer(accounts[1],'1000000000000000000')
