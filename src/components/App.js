@@ -5,6 +5,9 @@ import Web3 from "web3";
 import Tether from '../truffle_abis/Tether.json'
 import RWD from '../truffle_abis/RWD.json'
 import DecentralBank from '../truffle_abis/DecentralBank.json'
+import Main from "./Main";
+import ParticleSettings from './ParticleSettings'
+
 class App extends Component {
 
     async UNSAFE_componentWillMount() {
@@ -69,6 +72,40 @@ class App extends Component {
         this.setState({loading:false})
     }
 
+    //two function one that stake and one that unstake
+    //leverage our decentralBank contract - deposit tokens and unstaking
+    //All of this staking:
+    //depositTokens transerFrom ....
+    //function approve transaction hash -----
+    //STAKING Function ?? >> decentralBank.depositTokens(send transactionHash =>)
+
+
+    // Staking funciton 
+
+    stakeTokens = (amount) => {
+        this.setState({loading:true})
+        console.log(this.state.account)
+       this.state.tether.methods.approve(this.state.decentralBank._address,amount).send({from:this.state.account}).on('transactionHash',(hash)=>{
+
+
+        this.state.decentralBank.methods.depositTokens(amount).send({from:this.state.account}).on('transactionHash',(hash)=>{
+
+            this.setState({loading:false})
+        })
+    })
+    }
+
+    // UnStaking funciton 
+    unstakeTokens = () => {
+        this.setState({loading:true})
+
+        this.state.decentralBank.methods.unstakeTokens().send({from:this.state.account}).on('transactionHash',(hash)=>{
+
+            this.setState({loading:false})
+    })
+    }
+
+
     constructor(props) {
         super(props);
         this.state = {
@@ -84,13 +121,30 @@ class App extends Component {
     } 
 
     render() {
+        let content
+        {this.state.loading ?
+             content = <p id='loader' className='text-center' style={{margin:'30p'}}>
+                 LOADIND PLEASE...</p>
+                 :content=<Main
+                  tetherBalance={this.state.tetherBalance} 
+                  rwdBalance={this.state.rwdBalance} 
+                  stakingBalance={this.state.stakingBalance}
+                  stakeTokens={this.stakeTokens}
+                  unstakeTokens={this.unstakeTokens}
+                  />
+                }
         return (
-            <div>
+            <div className='App' style={{position:'relative'}}>
+                <div style={{position:'absolute'}}>
+                <ParticleSettings/>
+                </div>
                 <Navbar account={this.state.account} />
                 <div className='container-fluid mt-5'>
                     <div className='row'>
-                        <main >
-
+                        <main role='main' className='col-lg-12 ml-auto mr-auto'  style={{maxWidth:'600px',minHeight:'100vm'}}>
+                        <div>
+                            {content}
+                        </div>
                         </main>
                     </div>
 

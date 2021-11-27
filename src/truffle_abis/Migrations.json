@@ -74,7 +74,7 @@
   "sourceMap": "27:545:1:-;;;128:58;8:9:-1;5:2;;;30:1;27;20:12;5:2;128:58:1;167:10;159:5;;:18;;;;;;;;;;;;;;;;;;27:545;;;;;;",
   "deployedSourceMap": "27:545:1:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;27:545:1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;394:175;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;394:175:1;;;;;;;;;;;;;;;;;;;:::i;:::-;;83:36;;;:::i;:::-;;;;;;;;;;;;;;;;;;;56:20;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;268:112;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;268:112:1;;;;;;;;;;;;;;;;;:::i;:::-;;394:175;244:5;;;;;;;;;;;230:19;;:10;:19;;;227:25;;;459:19;492:10;459:44;;514:8;:21;;;536:24;;514:47;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;514:47:1;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;514:47:1;;;;251:1;227:25;394:175;:::o;83:36::-;;;;:::o;56:20::-;;;;;;;;;;;;;:::o;268:112::-;244:5;;;;;;;;;;;230:19;;:10;:19;;;227:25;;;363:9;336:24;:36;;;;227:25;268:112;:::o",
   "source": "pragma solidity ^0.5.0;\r\n\r\ncontract Migrations {\r\n\r\n    address public owner;\r\n    uint public last_completed_migration;\r\n\r\n    constructor() public{\r\n        owner = msg.sender; \r\n    }\r\n\r\n    modifier restricted() {\r\n        if(msg.sender == owner) _;\r\n    }\r\n\r\n    function setCompleted(uint completed) public restricted{\r\n\r\n        last_completed_migration = completed;\r\n    }\r\n\r\n    \r\n    function upgrade(address newAddress) public restricted{\r\n        Migrations upgraded = Migrations(newAddress);\r\n        upgraded.setCompleted(last_completed_migration);\r\n    }\r\n}",
-  "sourcePath": "C:\\Users\\Wic\\Desktop\\dApp\\my-Dapp\\src\\contracts\\Migrations.sol",
+  "sourcePath": "D:\\Final Year Project\\my-Dapp\\src\\contracts\\Migrations.sol",
   "ast": {
     "absolutePath": "project:/src/contracts/Migrations.sol",
     "exportedSymbols": {
@@ -1469,12 +1469,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0x665DBFE37D7d225E58913E70e64Be434740CFa27",
-      "transactionHash": "0xb7c4860ca903e14b42acfaa4de4c80cab7f935d1b5df23f4460ca9a579b96161"
+      "address": "0xCA116047aC02eb963bc7F6C1D0223362D8B69cd6",
+      "transactionHash": "0xcc68d75ec1c586baeb84434c7f05899a9263a9e6a17cefa8a3fc6972c475b012"
     }
   },
   "schemaVersion": "3.4.3",
-  "updatedAt": "2021-11-23T15:38:16.853Z",
+  "updatedAt": "2021-11-23T19:10:35.624Z",
   "networkType": "ethereum",
   "devdoc": {
     "methods": {}

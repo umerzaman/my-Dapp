@@ -1,5 +1,5 @@
 import React,{Component} from "react";
-import bank from '../bank.png'
+import bank from '../bank.png';
 
 class Navbar extends Component {
 
