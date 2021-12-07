@@ -1,82 +1,76 @@
- pragma solidity ^0.5.0;
- import './RWD.sol';
- import './Tether.sol';
+pragma solidity ^0.5.0;
 
+import './RWD.sol';
+import './Tether.sol';
 
 contract DecentralBank {
-    string public name = 'Decentral Bank';
-    address public owner;
-    Tether public tether;
-    RWD public rwd;
+  string public name = 'Decentral Bank';
+  address public owner;
+  Tether public tether;
+  RWD public rwd;
 
-    address [] public stakers;
+  address[] public stakers;
 
-    mapping(address => uint) public stakingBalance;
-    mapping(address => bool) public hasStaked;
-    mapping(address => bool) public isStaking;
+  mapping(address => uint) public stakingBalance;
+  mapping(address => bool) public hasStaked;
+  mapping(address => bool) public isStaking;
 
+constructor(RWD _rwd, Tether _tether) public {
+    rwd = _rwd;
+    tether = _tether;
+    owner = msg.sender;
+}
 
+  // staking function   
+function depositTokens(uint _amount) public {
 
-    constructor(RWD _rwd,Tether _tether) public{
-        rwd = _rwd;
-        tether =_tether;
-        owner = msg.sender;
-    }  
+  // require staking amount to be greater than zero
+    require(_amount > 0, 'amount cannot be 0');
+  
+  // Transfer tether tokens to this contract address for staking
+  tether.transferFrom(msg.sender, address(this), _amount);
 
-    function depositTokens(uint _amount) public{
-        //require staking amount to be greater than Zero
-        require(_amount > 0, 'amount cannot be 0');
+  // Update Staking Balance
+  stakingBalance[msg.sender] = stakingBalance[msg.sender] + _amount;
 
-        //Transer tether token to this contract address for staking
-        tether.TransferFrom(msg.sender, address(this), _amount);
+  if(!hasStaked[msg.sender]) {
+    stakers.push(msg.sender);
+  }
 
-        // Update Staking Balance 
-        stakingBalance[msg.sender] =  stakingBalance[msg.sender] + _amount; 
+  // Update Staking Balance
+    isStaking[msg.sender] = true;
+    hasStaked[msg.sender] = true;
+}
 
-        if(!hasStaked[msg.sender]){
-            stakers.push(msg.sender);
-        }
-        
-        //Update staking balance
-        isStaking[msg.sender] = true;
-        hasStaked[msg.sender] = true;
-    }
+  // unstake tokens
+  function unstakeTokens() public {
+    uint balance = stakingBalance[msg.sender];
+    // require the amount to be greater than zero
+    require(balance > 0, 'staking balance cannot be less than zero');
 
-    //unstake token
+    // transfer the tokens to the specified contract address from our bank
+    tether.transfer(msg.sender, balance);
 
-    function unstakeTokens() public{
-        
-        uint balance = stakingBalance[msg.sender];
-        require(balance > 0, 'staking balance cannot be less than zero');// balance must be greater than zero
+    // reset staking balance
+    stakingBalance[msg.sender] = 0;
 
-        // transer tokens to the specified  contract address from our bank
+    // Update Staking Status
+    isStaking[msg.sender] = false;
 
-        tether.transfer(msg.sender,balance);
-        //reset staking balance 
-        stakingBalance[msg.sender] = 0;
+  }
 
-        // Update staking status
+  // issue rewards
+        function issueTokens() public {
+            // Only owner can call this function
+            require(msg.sender == owner, 'caller must be the owner');
 
-        isStaking[msg.sender] = false;
-
-
-    }
-
-
-    // issue rewards
-
-    function issueTokens() public{
-        // require the owner to issue tokens only
-        require(msg.sender == owner, 'caller must be owner');
-
-        for (uint i = 0; i < stakers.length; i++) {
-            address recipient = stakers[i];
-            uint balance = stakingBalance[recipient] / 9; // divide by 9 to create percentage incentive 
-
-            if(balance > 0){
+            // issue tokens to all stakers
+            for (uint i=0; i<stakers.length; i++) {
+                address recipient = stakers[i]; 
+                uint balance = stakingBalance[recipient] / 9;
+                if(balance > 0) {
                 rwd.transfer(recipient, balance);
             }
-            
-        }
-    }
+       }
+       }
 }
